@@ -1,0 +1,2297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KUMOA TOLEDO — Burgers de Autor · Las Ventas de Retamosa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,300&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── VARIABLES ─────────────────────────────────────────────── */
+    :root {
+      --bg:          #080604;
+      --bg-card:     #131109;
+      --bg-section:  #0f0d08;
+      --accent:      #e8a020;
+      --accent-l:    #f5c84a;
+      --accent-dim:  rgba(232,160,32,.12);
+      --text:        #f2ede6;
+      --muted:       #8a8480;
+      --border:      rgba(232,160,32,.18);
+      --radius:      14px;
+      --max-w:       1200px;
+      --nav-h:       72px;
+    }
+
+    /* ── RESET ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.65;
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+    /* ── TIPOGRAFÍA GLOBAL ─────────────────────────────────────── */
+    h1,h2,h3 { font-family:'Montserrat',sans-serif; font-weight:900; line-height:1.05; }
+    .display  { font-family:'Bebas Neue',sans-serif; letter-spacing:.05em; }
+
+    /* ── UTILIDADES ────────────────────────────────────────────── */
+    .container { max-width:var(--max-w); margin:0 auto; padding:0 28px; }
+
+    .label {
+      display:inline-block;
+      font-family:'Montserrat',sans-serif;
+      font-size:10.5px; font-weight:700;
+      letter-spacing:.28em; text-transform:uppercase;
+      color:var(--accent); margin-bottom:14px;
+    }
+
+    .sec-title {
+      font-size:clamp(2.2rem,4.5vw,3.8rem);
+      margin-bottom:18px;
+    }
+
+    .sec-sub {
+      font-size:1.05rem; color:var(--muted);
+      max-width:600px; line-height:1.75;
+    }
+
+    /* ── ANIMACIONES REVEAL ────────────────────────────────────── */
+    .reveal, .r-left, .r-right {
+      opacity:0;
+      transition: opacity .85s cubic-bezier(.16,1,.3,1),
+                  transform .85s cubic-bezier(.16,1,.3,1);
+    }
+    .reveal  { transform: translateY(44px); }
+    .r-left  { transform: translateX(-44px); }
+    .r-right { transform: translateX(44px); }
+    .reveal.in, .r-left.in, .r-right.in { opacity:1; transform:none; }
+
+    .stag {
+      opacity:0; transform:translateY(28px);
+      transition: opacity .6s cubic-bezier(.16,1,.3,1),
+                  transform .6s cubic-bezier(.16,1,.3,1);
+    }
+    .stag.in { opacity:1; transform:none; }
+
+    @media (prefers-reduced-motion:reduce) {
+      .reveal,.r-left,.r-right,.stag { opacity:1 !important; transform:none !important; transition:none !important; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       NAVEGACIÓN
+    ══════════════════════════════════════════════════════════════ */
+    #nav {
+      position:fixed; top:0; left:0; right:0; z-index:200;
+      height:var(--nav-h);
+      display:flex; align-items:center;
+      transition: background .4s, backdrop-filter .4s, box-shadow .4s;
+    }
+    #nav.solid {
+      background:rgba(8,6,4,.9);
+      backdrop-filter:blur(20px);
+      box-shadow:0 1px 0 var(--border);
+    }
+
+    .nav-in {
+      max-width:var(--max-w); margin:0 auto; padding:0 28px;
+      width:100%; display:flex; align-items:center; justify-content:space-between;
+    }
+
+    .nav-logo {
+      font-family:'Bebas Neue',sans-serif; font-size:1.85rem;
+      letter-spacing:.12em; color:var(--text); text-decoration:none;
+    }
+    .nav-logo span { color:var(--accent); }
+
+    .nav-links { display:flex; gap:38px; list-style:none; }
+    .nav-links a {
+      font-family:'Montserrat',sans-serif; font-size:11.5px;
+      font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--muted); text-decoration:none;
+      transition:color .3s;
+    }
+    .nav-links a:hover { color:var(--accent); }
+
+    .nav-cta {
+      background:var(--accent) !important; color:#000 !important;
+      padding:10px 22px; border-radius:7px; font-weight:800 !important;
+      box-shadow:0 4px 20px rgba(232,160,32,.35);
+      transition:background .3s, transform .2s, box-shadow .3s !important;
+    }
+    .nav-cta:hover {
+      background:var(--accent-l) !important;
+      transform:translateY(-1px);
+      box-shadow:0 8px 28px rgba(232,160,32,.45) !important;
+    }
+
+    .burger-btn {
+      display:none; flex-direction:column; gap:5px;
+      cursor:pointer; padding:8px; background:none; border:none;
+    }
+    .burger-btn span {
+      display:block; width:24px; height:2px;
+      background:var(--text); border-radius:2px;
+      transition:all .35s;
+    }
+    .burger-btn.open span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+    .burger-btn.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
+    .burger-btn.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
+    .mobile-menu {
+      display:none; position:fixed; inset:0; z-index:190;
+      background:rgba(8,6,4,.97);
+      flex-direction:column; align-items:center; justify-content:center; gap:44px;
+    }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a {
+      font-family:'Bebas Neue',sans-serif; font-size:3.2rem;
+      letter-spacing:.1em; color:var(--text); text-decoration:none;
+      transition:color .3s;
+    }
+    .mobile-menu a:hover { color:var(--accent); }
+
+    /* ══════════════════════════════════════════════════════════════
+       HERO — SCROLL VIDEO
+    ══════════════════════════════════════════════════════════════ */
+    #scroll-hero { height:600vh; position:relative; }
+
+    .hero-sticky {
+      position:sticky; top:0;
+      height:100vh; width:100%; overflow:hidden;
+    }
+
+    #heroVideo {
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+    }
+
+    .hero-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(
+        170deg,
+        rgba(8,6,4,.25) 0%,
+        rgba(8,6,4,.45) 55%,
+        rgba(8,6,4,.85) 100%
+      );
+      z-index:1;
+    }
+
+    .hero-content {
+      position:absolute; inset:0; z-index:2;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:0 28px;
+    }
+
+    .hero-pill {
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(232,160,32,.13);
+      border:1px solid rgba(232,160,32,.32);
+      padding:8px 18px; border-radius:100px;
+      font-family:'Montserrat',sans-serif;
+      font-size:11px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--accent); margin-bottom:28px;
+      backdrop-filter:blur(10px);
+    }
+
+    .hero-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(6rem,17vw,15rem);
+      letter-spacing:.03em; line-height:.9;
+      color:var(--text);
+      text-shadow:0 4px 80px rgba(0,0,0,.8);
+      margin-bottom:6px;
+    }
+    .hero-title .dot { color:var(--accent); }
+
+    .hero-sub {
+      font-family:'Montserrat',sans-serif;
+      font-size:clamp(.85rem,1.8vw,1.15rem);
+      font-weight:400; letter-spacing:.18em; text-transform:uppercase;
+      color:rgba(242,237,230,.65);
+      margin-bottom:52px;
+    }
+
+    .hero-btns { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+
+    .btn {
+      font-family:'Montserrat',sans-serif; font-size:12.5px;
+      font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+      padding:15px 36px; border-radius:8px; text-decoration:none;
+      transition:all .3s;
+    }
+    .btn-gold {
+      background:var(--accent); color:#000;
+      box-shadow:0 4px 24px rgba(232,160,32,.4);
+    }
+    .btn-gold:hover {
+      background:var(--accent-l); transform:translateY(-2px);
+      box-shadow:0 8px 32px rgba(232,160,32,.5);
+    }
+    .btn-ghost {
+      background:transparent; color:var(--text);
+      border:1.5px solid rgba(242,237,230,.28);
+    }
+    .btn-ghost:hover {
+      border-color:var(--accent); color:var(--accent);
+      transform:translateY(-2px);
+    }
+
+    .scroll-hint {
+      position:absolute; bottom:40px; left:50%; transform:translateX(-50%);
+      z-index:2; display:flex; flex-direction:column; align-items:center; gap:8px;
+      color:rgba(242,237,230,.45);
+      font-family:'Montserrat',sans-serif;
+      font-size:9.5px; letter-spacing:.22em; text-transform:uppercase;
+      pointer-events:none;
+    }
+    .mouse-icon {
+      width:22px; height:34px;
+      border:2px solid rgba(242,237,230,.3); border-radius:11px; position:relative;
+    }
+    .mouse-icon::after {
+      content:''; position:absolute;
+      top:5px; left:50%; transform:translateX(-50%);
+      width:3px; height:6px; background:var(--accent); border-radius:2px;
+      animation:mouseDot 1.6s infinite;
+    }
+    @keyframes mouseDot {
+      0%   { top:5px; opacity:1; }
+      100% { top:20px; opacity:0; }
+    }
+
+    /* progress bar */
+    .scroll-bar {
+      position:absolute; bottom:0; left:0; right:0;
+      height:3px; background:rgba(255,255,255,.08); z-index:3;
+    }
+    #progFill {
+      height:100%; width:0%;
+      background:linear-gradient(90deg,var(--accent),var(--accent-l));
+      transition:width .05s linear;
+    }
+
+    /* ── Mobile: autoplay en lugar de scroll-driven ────────────── */
+    @media (max-width:768px) {
+      #scroll-hero { height:100vh; }
+      .hero-sticky { position:relative; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       SOBRE NOSOTROS
+    ══════════════════════════════════════════════════════════════ */
+    #nosotros {
+      padding:128px 0;
+      position:relative; overflow:hidden;
+    }
+
+    #nosotros::before {
+      content:'KUMOA';
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(8rem,22vw,24rem);
+      color:rgba(232,160,32,.028); white-space:nowrap;
+      pointer-events:none; user-select:none; z-index:0;
+    }
+
+    .nosotros-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:88px;
+      align-items:center; position:relative; z-index:1;
+    }
+
+    .nosotros-text .sec-sub { margin-bottom:40px; }
+
+    .feat-list { list-style:none; display:flex; flex-direction:column; gap:14px; }
+    .feat-list li {
+      display:flex; align-items:center; gap:12px;
+      font-family:'Montserrat',sans-serif; font-size:13.5px; font-weight:600; color:var(--muted);
+    }
+    .feat-list li::before {
+      content:''; width:7px; height:7px;
+      background:var(--accent); border-radius:50%; flex-shrink:0;
+    }
+
+    .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+
+    .stat-card {
+      background:var(--bg-card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:34px 24px; text-align:center;
+      position:relative; overflow:hidden;
+      transition:border-color .3s, transform .3s, box-shadow .3s;
+      cursor:default;
+    }
+    .stat-card::after {
+      content:'';
+      position:absolute; bottom:0; left:0; right:0;
+      height:3px;
+      background:linear-gradient(90deg,var(--accent),transparent);
+      transform:scaleX(0); transform-origin:left;
+      transition:transform .4s ease;
+    }
+    .stat-card:hover { border-color:var(--accent); transform:translateY(-5px); box-shadow:0 16px 48px rgba(0,0,0,.4); }
+    .stat-card:hover::after { transform:scaleX(1); }
+
+    .stat-num {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:4.2rem; color:var(--accent); line-height:1; margin-bottom:8px;
+    }
+    .stat-num sup { font-size:2rem; vertical-align:super; }
+
+    .stat-lbl {
+      font-family:'Montserrat',sans-serif;
+      font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       CITA PARALLAX
+    ══════════════════════════════════════════════════════════════ */
+    #parallax-strip {
+      height:260px; position:relative; overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .px-bg {
+      position:absolute; inset:-60px;
+      background:linear-gradient(135deg,rgba(232,160,32,.07) 0%, transparent 65%);
+      transition:transform .1s linear;
+    }
+    .px-quote {
+      position:relative; z-index:2; text-align:center;
+      font-family:'Montserrat',sans-serif;
+      font-size:clamp(1.1rem,2.8vw,1.85rem); font-weight:800;
+      color:var(--text); max-width:850px; padding:0 28px; line-height:1.3;
+    }
+    .px-quote em { color:var(--accent); font-style:normal; }
+
+    /* ══════════════════════════════════════════════════════════════
+       CARTA
+    ══════════════════════════════════════════════════════════════ */
+    #carta { padding:128px 0; background:var(--bg-section); }
+
+    .sec-head { text-align:center; margin-bottom:64px; }
+    .sec-head .sec-sub { margin:0 auto; }
+
+    .tabs {
+      display:flex; justify-content:center; gap:8px;
+      flex-wrap:wrap; margin-bottom:56px;
+    }
+
+    .tab {
+      background:transparent;
+      border:1.5px solid rgba(242,237,230,.13);
+      color:var(--muted);
+      font-family:'Montserrat',sans-serif;
+      font-size:11.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+      padding:10px 26px; border-radius:100px;
+      cursor:pointer; transition:all .3s;
+    }
+    .tab:hover { border-color:var(--accent); color:var(--accent); }
+    .tab.on { background:var(--accent); border-color:var(--accent); color:#000; }
+
+    .cat { display:none; }
+    .cat.on {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+      gap:22px;
+    }
+
+    .mcard {
+      background:var(--bg-card);
+      border:1px solid var(--border); border-radius:var(--radius);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+      transition:border-color .3s, transform .3s, box-shadow .3s; cursor:default;
+    }
+    .mcard:hover {
+      border-color:var(--accent); transform:translateY(-5px);
+      box-shadow:0 14px 44px rgba(0,0,0,.4);
+    }
+
+    .mcard-photo { cursor:pointer; }
+    .mcard-photo .mcard-img { background:#0b0700; }
+    .bimg {
+      width:100%; height:100%;
+      object-fit:cover;
+      position:absolute; inset:0;
+      transition:transform .5s cubic-bezier(.16,1,.3,1), filter .4s;
+      filter:brightness(.95) contrast(1.05) saturate(1.1);
+    }
+    .mcard-photo:hover .bimg {
+      transform:scale(1.06);
+      filter:brightness(1.05) contrast(1.08) saturate(1.15);
+    }
+    .mcard-photo .mcard-img::before {
+      content:'🔍';
+      position:absolute; inset:0; z-index:3;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.6rem;
+      background:rgba(0,0,0,0);
+      transition:background .3s;
+      opacity:0;
+    }
+    .mcard-photo:hover .mcard-img::before { opacity:1; background:rgba(0,0,0,.28); }
+
+    /* ── Imagen de cada plato ────────────────── */
+    .mcard-img {
+      height:160px; flex-shrink:0; position:relative; overflow:hidden;
+    }
+    .mcard-img[data-cat="burger"]     { background:linear-gradient(150deg,#1e0f00,#6b3000,#3a1800); }
+    .mcard-img[data-cat="poultry"]    { background:linear-gradient(150deg,#2a1e00,#6b4a00,#4a3200); }
+    .mcard-img[data-cat="pork"]       { background:linear-gradient(150deg,#2d1400,#7a3a00,#4a1f00); }
+    .mcard-img[data-cat="seafood"]    { background:linear-gradient(150deg,#001a25,#004455,#002030); }
+    .mcard-img[data-cat="veggie"]     { background:linear-gradient(150deg,#001400,#003a00,#002000); }
+    .mcard-img[data-cat="dessert"]    { background:linear-gradient(150deg,#1e0f00,#553000,#3a2000); }
+    .mcard-img[data-cat="chocolate"]  { background:linear-gradient(150deg,#050300,#1a0d05,#0a0600); }
+    .mcard-img[data-cat="cheese"]     { background:linear-gradient(150deg,#1e1a0a,#504830,#352e18); }
+    .mcard-img[data-cat="pistachio"]  { background:linear-gradient(150deg,#0a1a00,#204000,#102600); }
+    .mcard-img[data-cat="potato"]     { background:linear-gradient(150deg,#1e1500,#554000,#3a2a00); }
+    .mcard-img[data-cat="bbq"]        { background:linear-gradient(150deg,#2a0800,#6b2000,#4a1200); }
+    .mcard-img[data-cat="nachos"]     { background:linear-gradient(150deg,#2a1a00,#664a00,#3d2a00); }
+    .mcard-img[data-cat="special"]    { background:linear-gradient(150deg,#1a0800,#5a2a00,#3a1400);
+                                        border-bottom:1px solid rgba(232,160,32,.25); }
+    .mcard-img::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:55%;
+      background:linear-gradient(transparent,var(--bg-card)); z-index:1; pointer-events:none;
+    }
+    .mcard-img img {
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;
+      transition:transform .5s cubic-bezier(.16,1,.3,1);
+    }
+    .mcard:hover .mcard-img img { transform:scale(1.06); }
+    .mcard-img-icon {
+      position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+      font-size:2.6rem; z-index:2; line-height:1; opacity:.75;
+      filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));
+      pointer-events:none;
+    }
+
+    .mcard-content {
+      padding:20px 22px;
+      display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
+      flex:1;
+    }
+
+    .mcard-body { flex:1; }
+    .mcard-name {
+      font-family:'Montserrat',sans-serif; font-size:14.5px; font-weight:700;
+      margin-bottom:7px; color:var(--text);
+    }
+    .mcard-desc { font-size:13px; color:var(--muted); line-height:1.5; }
+
+    .mcard-off { opacity:.45; pointer-events:none; }
+    .mcard-nodisponible {
+      font-size:.7rem; font-weight:700; color:#ef4444;
+      text-transform:uppercase; letter-spacing:.08em;
+      padding:2px 8px; background:rgba(239,68,68,.12);
+      border-radius:4px; margin-top:6px; display:inline-block;
+    }
+    .mcard-price {
+      font-family:'Bebas Neue',sans-serif; font-size:1.65rem;
+      color:var(--accent); letter-spacing:.04em;
+      white-space:nowrap; flex-shrink:0; align-self:center;
+    }
+
+    .mcard-special {
+      grid-column:1/-1;
+      background:linear-gradient(135deg,rgba(232,160,32,.07),rgba(232,160,32,.02));
+      border-color:rgba(232,160,32,.38);
+    }
+    .mcard-special .mcard-img { height:200px; }
+    .badge-especial {
+      display:inline-block; margin-top:6px;
+      background:rgba(232,160,32,.18); border:1px solid rgba(232,160,32,.3);
+      color:var(--accent); font-family:'Montserrat',sans-serif;
+      font-size:9px; font-weight:800; letter-spacing:.18em; text-transform:uppercase;
+      padding:3px 9px; border-radius:4px;
+    }
+
+    /* ── Separador de subsección dentro de una pestaña ─────────── */
+    .cat-sep {
+      grid-column:1/-1;
+      display:flex; align-items:center; gap:14px;
+      padding:28px 0 6px;
+    }
+    .cat-sep:first-child { padding-top:4px; }
+    .cat-sep span {
+      font-family:'Montserrat',sans-serif; font-size:10.5px;
+      font-weight:800; letter-spacing:.28em; text-transform:uppercase;
+      color:var(--accent); white-space:nowrap;
+    }
+    .cat-sep::before,.cat-sep::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* ── Tarjetas compactas para bebidas ────────────────────────── */
+    .drinks-grid {
+      grid-column:1/-1;
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+      gap:10px; padding-top:4px;
+    }
+    .dcard {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius); padding:18px 12px 14px;
+      display:flex; flex-direction:column; align-items:center;
+      text-align:center; gap:8px;
+      transition:border-color .3s, transform .3s; cursor:default;
+    }
+    .dcard:hover { border-color:var(--accent); transform:translateY(-4px); }
+    .dcard-icon { font-size:2.2rem; line-height:1; }
+    .dcard-name {
+      font-family:'Montserrat',sans-serif;
+      font-size:11.5px; font-weight:700; color:var(--text); line-height:1.35;
+    }
+    .dcard-price {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:1.45rem; color:var(--accent); letter-spacing:.04em;
+    }
+
+    /* ── Extras / salsas (pills) ────────────────────────────────── */
+    .extras-wrap {
+      grid-column:1/-1;
+      display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+      margin-top:44px; padding-top:36px;
+      border-top:1px solid var(--border);
+    }
+    .epill {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:100px; padding:8px 18px;
+      display:flex; align-items:center; gap:10px;
+      font-family:'Montserrat',sans-serif; font-size:12.5px;
+      font-weight:600; color:var(--text);
+      transition:border-color .3s; cursor:default;
+    }
+    .epill:hover { border-color:var(--accent); }
+    .epill .ep-p {
+      font-family:'Bebas Neue',sans-serif; font-size:1.25rem;
+      color:var(--accent); letter-spacing:.03em;
+    }
+    .extras-label {
+      grid-column:1/-1; text-align:center;
+      font-family:'Montserrat',sans-serif; font-size:10.5px;
+      font-weight:800; letter-spacing:.28em; text-transform:uppercase;
+      color:var(--muted); margin-bottom:4px;
+    }
+
+    /* ── Tarjetas de promo viernes ──────────────────────────────── */
+    .promo-card {
+      background:linear-gradient(135deg,rgba(232,160,32,.1),rgba(232,160,32,.03));
+      border:1px solid rgba(232,160,32,.35);
+      border-radius:var(--radius); padding:32px 28px;
+      display:flex; flex-direction:column; gap:14px;
+      transition:border-color .3s, transform .3s;
+    }
+    .promo-card:hover { border-color:var(--accent); transform:translateY(-5px); }
+
+    .promo-opt {
+      font-family:'Lato',sans-serif; font-size:13.5px; color:var(--muted);
+      padding:6px 0; border-bottom:1px solid rgba(232,160,32,.08);
+      display:flex; align-items:center; gap:8px;
+    }
+    .promo-opt::before { content:'·'; color:var(--accent); font-size:1.2rem; line-height:1; }
+    .promo-opt-fixed {
+      color:var(--text); font-weight:700;
+      background:rgba(232,160,32,.08); border-radius:6px;
+      padding:8px 12px; border-bottom:none;
+    }
+    .promo-opt-fixed::before { content:'★'; color:var(--accent); }
+    .promo-badge {
+      display:inline-block;
+      background:var(--accent); color:#000;
+      font-family:'Montserrat',sans-serif; font-size:9px;
+      font-weight:800; letter-spacing:.2em; text-transform:uppercase;
+      padding:4px 12px; border-radius:4px; width:fit-content;
+    }
+    .promo-title {
+      font-family:'Bebas Neue',sans-serif; font-size:1.9rem;
+      color:var(--text); letter-spacing:.05em; line-height:1;
+    }
+    .promo-desc { font-size:13px; color:var(--muted); line-height:1.65; }
+    .promo-price {
+      font-family:'Bebas Neue',sans-serif; font-size:3rem;
+      color:var(--accent); letter-spacing:.03em; line-height:1;
+    }
+    .promo-note {
+      font-size:11px; color:var(--muted);
+      font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:.04em;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       GALERÍA
+    ══════════════════════════════════════════════════════════════ */
+    #galeria { padding:128px 0; background:var(--bg-section); }
+
+    .gallery-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      grid-auto-rows:240px;
+      gap:14px;
+    }
+    .gallery-item {
+      position:relative; overflow:hidden;
+      border-radius:var(--radius); background:var(--bg-card);
+      cursor:pointer;
+    }
+    .gallery-item.g-wide { grid-column:span 2; }
+    .gallery-item.g-tall { grid-row:span 2; }
+    .gallery-item img {
+      width:100%; height:100%; object-fit:cover; display:block;
+      transition:transform .65s cubic-bezier(.16,1,.3,1);
+    }
+    .gallery-item:hover img { transform:scale(1.08); }
+    .gallery-item::before {
+      content:'🔍'; position:absolute; inset:0; z-index:3;
+      display:flex; align-items:center; justify-content:center;
+      font-size:2rem; opacity:0; transition:opacity .3s;
+      pointer-events:none;
+    }
+    .gallery-item:hover::before { opacity:1; }
+    .gallery-item::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(180deg,transparent 40%,rgba(8,6,4,.55) 100%);
+      opacity:0; transition:opacity .4s;
+    }
+    .gallery-item:hover::after { opacity:1; }
+    /* Fallback gradient per item */
+    .gallery-item:nth-child(1) { background:linear-gradient(150deg,#1a1205,#3a2a0a); }
+    .gallery-item:nth-child(2) { background:linear-gradient(150deg,#1a0a00,#4a2200); }
+    .gallery-item:nth-child(3) { background:linear-gradient(150deg,#0a0f00,#2a3000); }
+    .gallery-item:nth-child(4) { background:linear-gradient(150deg,#1e0f00,#6b3000); }
+    .gallery-item:nth-child(5) { background:linear-gradient(150deg,#001a25,#004455); }
+    .gallery-item:nth-child(6) { background:linear-gradient(150deg,#150a00,#4a2800); }
+    .gallery-item:nth-child(7) { background:linear-gradient(150deg,#0a1400,#203000); }
+    .gallery-item:nth-child(8) { background:linear-gradient(150deg,#1a0a00,#502800); }
+    .gallery-item:nth-child(9) { background:linear-gradient(150deg,#1a1508,#3a3010); }
+
+    .gallery-ig { margin-top:40px; text-align:center; }
+    .gallery-ig a {
+      display:inline-flex; align-items:center; gap:10px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-l));
+      color:#000; padding:14px 36px; border-radius:100px;
+      font-family:'Montserrat',sans-serif; font-size:12px;
+      font-weight:800; letter-spacing:.12em; text-transform:uppercase;
+      text-decoration:none; transition:transform .3s, box-shadow .3s;
+    }
+    .gallery-ig a:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(232,160,32,.4); }
+
+    @media (max-width:768px) {
+      .gallery-grid { grid-template-columns:1fr 1fr; grid-auto-rows:180px; }
+      .gallery-item.g-tall { grid-row:span 1; }
+      #galeria { padding:88px 0; }
+    }
+    @media (max-width:480px) {
+      .gallery-grid { grid-template-columns:1fr; grid-auto-rows:220px; }
+      .gallery-item.g-wide { grid-column:span 1; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       TESTIMONIOS
+    ══════════════════════════════════════════════════════════════ */
+    #testimonios { padding:128px 0; }
+
+    .test-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:22px;
+    }
+
+    .tcard {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius); padding:34px;
+      display:flex; flex-direction:column; gap:22px;
+      transition:border-color .3s, transform .3s;
+    }
+    .tcard:hover { border-color:var(--accent); transform:translateY(-5px); }
+
+    .stars { color:var(--accent); font-size:13px; letter-spacing:2px; }
+
+    .ttext {
+      font-size:14.5px; color:rgba(242,237,230,.82);
+      line-height:1.75; flex:1; font-style:italic;
+    }
+    .ttext::before { content:'\201C'; }
+    .ttext::after  { content:'\201D'; }
+
+    .tauthor { display:flex; align-items:center; gap:13px; }
+    .avatar {
+      width:42px; height:42px; border-radius:50%;
+      background:var(--accent-dim); border:1.5px solid var(--accent);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Montserrat',sans-serif; font-weight:800; font-size:15px;
+      color:var(--accent); flex-shrink:0;
+    }
+    .ainfo strong { display:block; font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; }
+    .ainfo span { font-size:11px; color:var(--muted); }
+
+    .google-rate {
+      margin-top:48px; text-align:center;
+      display:flex; align-items:center; justify-content:center; gap:16px;
+    }
+    .google-rate .big {
+      font-family:'Bebas Neue',sans-serif; font-size:4.5rem;
+      color:var(--accent); line-height:1;
+    }
+    .google-rate .details { text-align:left; }
+    .google-rate .details .stars { font-size:16px; letter-spacing:3px; margin-bottom:4px; }
+    .google-rate .details p { font-size:13px; color:var(--muted); font-family:'Montserrat',sans-serif; font-weight:600; }
+
+    /* ══════════════════════════════════════════════════════════════
+       CONTACTO
+    ══════════════════════════════════════════════════════════════ */
+    #contacto { padding:128px 0 0; background:var(--bg-section); }
+
+    .contacto-grid { display:grid; grid-template-columns:1fr 1fr; gap:88px; padding-bottom:100px; }
+
+    .info-list { display:flex; flex-direction:column; gap:34px; margin-top:44px; }
+
+    .info-row { display:flex; gap:20px; align-items:flex-start; }
+
+    .info-ico {
+      width:50px; height:50px; border-radius:13px;
+      background:var(--accent-dim); border:1px solid var(--border);
+      display:flex; align-items:center; justify-content:center;
+      font-size:21px; flex-shrink:0;
+    }
+
+    .info-body strong {
+      display:block; font-family:'Montserrat',sans-serif;
+      font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--accent); margin-bottom:6px;
+    }
+    .info-body p, .info-body a {
+      font-size:14.5px; color:var(--muted); text-decoration:none; line-height:1.65;
+    }
+    .info-body a:hover { color:var(--accent); }
+
+    .h-table { width:100%; }
+    .h-table td { padding:4px 0; font-size:13.5px; color:var(--muted); }
+    .h-table td:first-child {
+      font-weight:700; font-family:'Montserrat',sans-serif;
+      color:var(--text); padding-right:26px; white-space:nowrap;
+    }
+
+    /* reserva form */
+    .form-card {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:var(--radius); padding:48px;
+      display:flex; flex-direction:column; gap:28px;
+    }
+
+    .frow { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+    .fgroup { display:flex; flex-direction:column; gap:8px; }
+    .fgroup label {
+      font-family:'Montserrat',sans-serif; font-size:10.5px;
+      font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
+    }
+    .fgroup input, .fgroup select, .fgroup textarea {
+      background:rgba(255,255,255,.04); border:1px solid rgba(242,237,230,.1);
+      border-radius:9px; padding:14px 16px; color:var(--text);
+      font-family:'Lato',sans-serif; font-size:14.5px; outline:none;
+      transition:border-color .3s;
+    }
+    .fgroup input:focus, .fgroup select:focus, .fgroup textarea:focus { border-color:var(--accent); }
+    .fgroup input::placeholder, .fgroup textarea::placeholder { color:rgba(138,132,128,.5); }
+    .fgroup select option { background:#131109; }
+    .fgroup textarea { resize:vertical; min-height:110px; }
+
+    .btn-send {
+      background:var(--accent); color:#000; border:none;
+      font-family:'Montserrat',sans-serif; font-size:13px;
+      font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+      padding:16px; border-radius:9px; cursor:pointer; width:100%;
+      transition:background .3s, transform .2s;
+    }
+    .btn-send:hover { background:var(--accent-l); transform:translateY(-2px); }
+
+    /* ══════════════════════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════════════════════ */
+    footer {
+      background:var(--bg); border-top:1px solid var(--border);
+      padding:52px 0 32px;
+    }
+
+    .foot-in {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      flex-wrap:wrap; gap:28px;
+    }
+
+    .foot-logo {
+      font-family:'Bebas Neue',sans-serif; font-size:2.1rem;
+      letter-spacing:.12em; color:var(--text); text-decoration:none; display:block;
+    }
+    .foot-logo span { color:var(--accent); }
+    .foot-tag { font-size:13px; color:var(--muted); margin-top:5px; }
+
+    .foot-nav { list-style:none; display:flex; gap:34px; flex-wrap:wrap; align-items:center; }
+    .foot-nav a {
+      font-family:'Montserrat',sans-serif; font-size:11.5px;
+      font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--muted); text-decoration:none; transition:color .3s;
+    }
+    .foot-nav a:hover { color:var(--accent); }
+
+    .foot-copy {
+      width:100%; text-align:center; margin-top:36px; padding-top:28px;
+      border-top:1px solid rgba(242,237,230,.05);
+      font-size:12px; color:var(--muted);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════════════════════ */
+    @media (max-width:900px) {
+      .nosotros-grid, .contacto-grid { grid-template-columns:1fr; gap:56px; }
+      .test-grid { grid-template-columns:1fr 1fr; }
+    }
+
+    @media (max-width:768px) {
+      .nav-links { display:none; }
+      .burger-btn { display:flex; }
+      .test-grid { grid-template-columns:1fr; }
+      .stats-grid { grid-template-columns:1fr 1fr; }
+      .frow { grid-template-columns:1fr; }
+      .form-card { padding:32px 24px; }
+      #nosotros, #carta, #testimonios { padding:88px 0; }
+      #contacto { padding:88px 0 0; }
+      .mcard-special { grid-column:auto; }
+    }
+
+    @media (max-width:480px) {
+      .stats-grid { grid-template-columns:1fr; }
+      .hero-pill { font-size:9px; letter-spacing:.16em; }
+    }
+
+    /* ── LIGHTBOX ──────────────────────────────────────────── */
+    #lightbox {
+      display:none; position:fixed; inset:0; z-index:1000;
+      background:rgba(0,0,0,.92); backdrop-filter:blur(10px);
+      align-items:center; justify-content:center; padding:24px;
+      cursor:zoom-out;
+    }
+    #lightbox.open { display:flex; }
+    #lightbox img {
+      max-width:min(92vw,820px); max-height:88vh;
+      object-fit:contain; border-radius:16px;
+      box-shadow:0 32px 80px rgba(0,0,0,.8);
+      animation:lbIn .25s cubic-bezier(.16,1,.3,1);
+    }
+    @keyframes lbIn {
+      from { opacity:0; transform:scale(.88); }
+      to   { opacity:1; transform:scale(1); }
+    }
+    #lightbox-caption {
+      position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+      font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.08em;
+      color:rgba(255,255,255,.7); white-space:nowrap; pointer-events:none;
+    }
+    #lightbox-close {
+      position:absolute; top:20px; right:24px;
+      background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+      color:#fff; border-radius:50%; width:42px; height:42px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.3rem; cursor:pointer; transition:background .2s;
+      pointer-events:all;
+    }
+    #lightbox-close:hover { background:rgba(255,255,255,.22); }
+  </style>
+</head>
+
+<body>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="cerrarLightbox()">
+  <button id="lightbox-close" onclick="cerrarLightbox()" aria-label="Cerrar">✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div id="lightbox-caption"></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     NAVEGACIÓN
+═══════════════════════════════════════════ -->
+<nav id="nav">
+  <div class="nav-in">
+    <a href="#" class="nav-logo">KUMOA<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#carta">Carta</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#testimonios">Reseñas</a></li>
+      <li><a href="#contacto" class="nav-cta">Reservar mesa</a></li>
+    </ul>
+    <button class="burger-btn" id="burgerBtn" aria-label="Menú" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#nosotros"    onclick="closeNav()">Nosotros</a>
+  <a href="#carta"       onclick="closeNav()">Carta</a>
+  <a href="#galeria"     onclick="closeNav()">Galería</a>
+  <a href="#testimonios" onclick="closeNav()">Reseñas</a>
+  <a href="#contacto"    onclick="closeNav()" style="color:var(--accent)">Reservar</a>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HERO — SCROLL-DRIVEN VIDEO
+═══════════════════════════════════════════ -->
+<section id="scroll-hero">
+  <div class="hero-sticky">
+    <video id="heroVideo" src="assets/hero.mp4"
+           playsinline muted preload="auto"></video>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-pill">★ 4.8 en Google &nbsp;·&nbsp; +500 Reseñas</div>
+      <h1 class="hero-title">KUMOA<span class="dot">.</span></h1>
+      <p class="hero-sub">Burgers de autor &nbsp;·&nbsp; Las Ventas de Retamosa, Toledo</p>
+      <div class="hero-btns">
+        <a href="#contacto" class="btn btn-gold">Reserva tu mesa</a>
+        <a href="#carta"    class="btn btn-ghost">Ver la carta</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <div class="mouse-icon"></div>
+      <span>Scroll</span>
+    </div>
+
+    <div class="scroll-bar"><div id="progFill"></div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SOBRE NOSOTROS
+═══════════════════════════════════════════ -->
+<section id="nosotros">
+  <div class="container">
+    <div class="nosotros-grid">
+
+      <div class="r-left">
+        <span class="label">Nuestra historia</span>
+        <h2 class="sec-title">Cocina de autor<br>con alma propia</h2>
+        <p class="sec-sub">
+          En KUMOA Toledo encontrarás una cocina que fusiona lo tradicional con toques modernos
+          en un ambiente íntimo, cálido y lleno de vegetación. Cada plato es una creación pensada
+          para sorprender — desde nuestras burgers de autor hasta los postres que ya son leyenda.
+        </p>
+        <ul class="feat-list">
+          <li>Ingredientes frescos y elaboración propia</li>
+          <li>Burgers de autor con recetas exclusivas</li>
+          <li>Ambiente acogedor con decoración vegetal</li>
+          <li>Terraza disponible en temporada</li>
+          <li>Parking gratuito junto al restaurante</li>
+        </ul>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card stag">
+          <div class="stat-num"><span data-count="4.8">0</span><sup>★</sup></div>
+          <div class="stat-lbl">Valoración Google</div>
+        </div>
+        <div class="stat-card stag">
+          <div class="stat-num">+<span data-count="500">0</span></div>
+          <div class="stat-lbl">Reseñas verificadas</div>
+        </div>
+        <div class="stat-card stag">
+          <div class="stat-num">#<span data-count="1">0</span></div>
+          <div class="stat-lbl">En Las Ventas de Retamosa</div>
+        </div>
+        <div class="stat-card stag">
+          <div class="stat-num"><span data-count="100">0</span><sup>%</sup></div>
+          <div class="stat-lbl">Clientes que repiten</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CITA PARALLAX -->
+<div id="parallax-strip">
+  <div class="px-bg" id="pxBg"></div>
+  <p class="px-quote">
+    Las <em>mejores hamburguesas</em> de la zona —
+    y una carta que va mucho más allá de lo que esperas
+  </p>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CARTA
+═══════════════════════════════════════════ -->
+<section id="carta">
+  <div class="container">
+
+    <div class="sec-head reveal">
+      <span class="label">Lo que cocinamos</span>
+      <h2 class="sec-title">Nuestra carta</h2>
+      <p class="sec-sub">Sabores auténticos y ese toque de autor que nos hace únicos en Toledo.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab on" onclick="cambiarTab('hamburguesas', this)">Hamburguesas</button>
+      <button class="tab"    onclick="cambiarTab('compartir',    this)">Para Compartir</button>
+      <button class="tab"    onclick="cambiarTab('carne',        this)">Carne</button>
+      <button class="tab"    onclick="cambiarTab('tostas',       this)">Tostas &amp; Sándwich</button>
+      <button class="tab"    onclick="cambiarTab('postres',      this)">Postres</button>
+      <button class="tab"    onclick="cambiarTab('bebidas',      this)">Bebidas</button>
+      <button class="tab"    onclick="cambiarTab('promos',       this)">⭐ Promo Viernes</button>
+      <button class="tab"    onclick="cambiarTab('extras',       this)">Salsas &amp; Extras</button>
+    </div>
+
+    <!-- HAMBURGUESAS -->
+    <div class="cat on" id="cat-hamburguesas">
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/burger-emmy.jpg','Emmy Royal')">
+        <div class="mcard-img" data-cat="special">
+          <img src="assets/burger-emmy.jpg" alt="Emmy Royal" loading="lazy" class="bimg">
+        </div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Emmy Royal</div>
+            <div class="mcard-desc">Nuestra burger de autor premium. Doble cheddar madurado, bacon ahumado y salsas propias de la casa.</div>
+          </div>
+          <div class="mcard-price">14,95€</div>
+        </div>
+      </div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/burger-dolcevita.jpg','La Dolce Vita')">
+        <div class="mcard-img" data-cat="burger">
+          <img src="assets/burger-dolcevita.jpg" alt="La Dolce Vita" loading="lazy" class="bimg">
+        </div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Dolce Vita</div>
+            <div class="mcard-desc">Combinación italiana de sabores: queso provolone, tomate confitado y rúcula fresca.</div>
+          </div>
+          <div class="mcard-price">13,50€</div>
+        </div>
+      </div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/burger-smashtrufada.jpg','Smash Trufada')">
+        <div class="mcard-img" data-cat="burger">
+          <img src="assets/burger-smashtrufada.jpg" alt="Smash Trufada" loading="lazy" class="bimg">
+        </div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Smash Trufada</div>
+            <div class="mcard-desc">Doble medallón aplastado en plancha, queso americano fundido y mayonesa de trufa.</div>
+          </div>
+          <div class="mcard-price">12,90€</div>
+        </div>
+      </div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/burger-fusion.jpg','Fusión')">
+        <div class="mcard-img" data-cat="burger">
+          <img src="assets/burger-fusion.jpg" alt="Fusión" loading="lazy" class="bimg">
+        </div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Fusión</div>
+            <div class="mcard-desc">Mezcla de sabores únicos con ingredientes seleccionados de distintas cocinas del mundo.</div>
+          </div>
+          <div class="mcard-price">14,50€</div>
+        </div>
+      </div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/burger-pollo.jpg','Pollo Crujiente')">
+        <div class="mcard-img" data-cat="poultry">
+          <img src="assets/burger-pollo.jpg" alt="Pollo Crujiente" loading="lazy" class="bimg">
+        </div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Pollo Crujiente</div>
+            <div class="mcard-desc">Pollo crujiente estilo southern, coleslaw casero y pickles encurtidos en casa.</div>
+          </div>
+          <div class="mcard-price">12,50€</div>
+        </div>
+      </div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/burger-habanera.jpg','La Habanera')">
+        <div class="mcard-img" data-cat="special">
+          <img src="assets/burger-habanera.jpg" alt="La Habanera" loading="lazy" class="bimg">
+        </div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">La Habanera</div>
+            <div class="mcard-desc">Inspirada en los sabores caribeños. Jalapeños, piña caramelizada y salsa tropical picante.</div>
+          </div>
+          <div class="mcard-price">15,00€</div>
+        </div>
+      </div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/burger-kumoa.jpg','Kumoa Burger')">
+        <div class="mcard-img" data-cat="special">
+          <img src="assets/burger-kumoa.jpg" alt="Kumoa Burger" loading="lazy" class="bimg">
+        </div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Kumoa Burger</div>
+            <div class="mcard-desc">La insignia de la casa. Receta exclusiva con nuestra mezcla secreta de especias y salsas propias.</div>
+          </div>
+          <div class="mcard-price">13,90€</div>
+        </div>
+      </div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/burger-pulledpork.jpg','Pulled Pork')">
+        <div class="mcard-img" data-cat="bbq">
+          <img src="assets/burger-pulledpork.jpg" alt="Pulled Pork" loading="lazy" class="bimg">
+        </div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Pulled Pork</div>
+            <div class="mcard-desc">Cerdo deshilachado cocinado durante horas con nuestras especias y salsa BBQ artesana.</div>
+          </div>
+          <div class="mcard-price">13,00€</div>
+        </div>
+      </div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/burger-oklahoma.jpg','Smash Oklahoma')">
+        <div class="mcard-img" data-cat="burger">
+          <img src="assets/burger-oklahoma.jpg" alt="Smash Oklahoma" loading="lazy" class="bimg">
+        </div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Smash Oklahoma</div>
+            <div class="mcard-desc">Medallón aplastado con cebolla caramelizada a la plancha, cheddar y salsa especial Oklahoma.</div>
+          </div>
+          <div class="mcard-price">13,00€</div>
+        </div>
+      </div>
+
+      <div class="mcard stag">
+        <div class="mcard-img" data-cat="burger"><span class="mcard-img-icon">🧒</span></div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Junior Burger</div>
+            <div class="mcard-desc">La perfecta para los más pequeños. Medallón de ternera, queso y ketchup casero.</div>
+          </div>
+          <div class="mcard-price">8,00€</div>
+        </div>
+      </div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/burger-vegana.jpg','Vegana')">
+        <div class="mcard-img" data-cat="veggie">
+          <img src="assets/burger-vegana.jpg" alt="Vegana" loading="lazy" class="bimg">
+        </div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Vegana</div>
+            <div class="mcard-desc">Hamburguesa 100% vegetal con aguacate, tomate, rúcula y nuestra salsa vegana de la casa.</div>
+          </div>
+          <div class="mcard-price">11,50€</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PARA COMPARTIR -->
+    <div class="cat" id="cat-compartir">
+
+      <div class="cat-sep"><span>Entrantes</span></div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-gambatornado.jpg','Gamba Tornado')">
+        <div class="mcard-img" data-cat="seafood"><img src="assets/comp-gambatornado.jpg" alt="Gamba Tornado" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Gamba Tornado</div><div class="mcard-desc">Gambas rebozadas en crujiente espiral con salsa de la casa. Irresistibles.</div></div><div class="mcard-price">9,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-tartarsalmon.jpg','Tartar de Salmón')">
+        <div class="mcard-img" data-cat="seafood"><img src="assets/comp-tartarsalmon.jpg" alt="Tartar de Salmón" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tartar de Salmón</div><div class="mcard-desc">Salmón fresco marinado con aguacate, alcaparras y vinagreta cítrica. Un clásico refinado.</div></div><div class="mcard-price">13,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-torrezno.jpg','Torrezno')">
+        <div class="mcard-img" data-cat="pork"><img src="assets/comp-torrezno.jpg" alt="Torrezno" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Torrezno</div><div class="mcard-desc">El imprescindible de la casa. Crujiente por fuera, tierno y jugoso por dentro.</div></div><div class="mcard-price">9,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-fingers.jpg','Fingers de Pollo')">
+        <div class="mcard-img" data-cat="poultry"><img src="assets/comp-fingers.jpg" alt="Fingers de Pollo" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Fingers de Pollo</div><div class="mcard-desc">Tiras de pollo crujiente rebozadas al momento con nuestra salsa especial.</div></div><div class="mcard-price">10,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-tequenos.jpg','Tequeños')">
+        <div class="mcard-img" data-cat="cheese"><img src="assets/comp-tequenos.jpg" alt="Tequeños" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tequeños</div><div class="mcard-desc">Palitos de masa frita rellenos de queso fundido. Crujientes, esponjosos y adictivos.</div></div><div class="mcard-price">9,90€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-jalapenos.jpg','Jalapeños')">
+        <div class="mcard-img" data-cat="veggie"><img src="assets/comp-jalapenos.jpg" alt="Jalapeños" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Jalapeños</div><div class="mcard-desc">Jalapeños rebozados y rellenos de queso cheddar fundido. Para los valientes.</div></div><div class="mcard-price">9,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-kumonachos.jpg','Kumonachos')">
+        <div class="mcard-img" data-cat="nachos"><img src="assets/comp-kumonachos.jpg" alt="Kumonachos" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Kumonachos</div><div class="mcard-desc">Nachos crujientes con queso fundido, jalapeños, guacamole y nuestra salsa brava.</div></div><div class="mcard-price">12,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-huevostrufados.png','Huevos Trufados')">
+        <div class="mcard-img" data-cat="special"><img src="assets/comp-huevostrufados.png" alt="Huevos Trufados" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Huevos Trufados</div><div class="mcard-desc">Huevos rotos con trufa negra sobre base de patatas paja crujientes. Lujo sencillo.</div></div><div class="mcard-price">14,00€</div></div>
+      </div>
+
+      <div class="cat-sep"><span>Ensaladas</span></div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-ensaladacesar.jpg','Ensalada César')">
+        <div class="mcard-img" data-cat="veggie"><img src="assets/comp-ensaladacesar.jpg" alt="Ensalada César" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Ensalada César</div><div class="mcard-desc">Lechuga romana, pollo a la plancha, croutons, parmesano y salsa César de la casa.</div></div><div class="mcard-price">12,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-ensaladacabra.jpg','Ensalada de Queso de Cabra')">
+        <div class="mcard-img" data-cat="cheese"><img src="assets/comp-ensaladacabra.jpg" alt="Ensalada de Queso de Cabra" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Ensalada de Queso de Cabra</div><div class="mcard-desc">Mix de lechugas, queso de cabra gratinado, nueces y vinagreta de miel y mostaza.</div></div><div class="mcard-price">12,00€</div></div>
+      </div>
+
+      <div class="cat-sep"><span>Croquetas</span></div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-croquetasmixtas.jpg','Croquetas Mixtas')">
+        <div class="mcard-img" data-cat="pork"><img src="assets/comp-croquetasmixtas.jpg" alt="Croquetas Mixtas" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Croquetas Mixtas</div><div class="mcard-desc">Surtido variado de nuestras croquetas caseras. Bechamel cremosa con ingredientes seleccionados.</div></div><div class="mcard-price">12,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-croquetasjamon.png','Croquetas de Jamón')">
+        <div class="mcard-img" data-cat="pork"><img src="assets/comp-croquetasjamon.png" alt="Croquetas de Jamón" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Croquetas de Jamón</div><div class="mcard-desc">Elaboración casera con jamón ibérico seleccionado. Crujientes por fuera, cremosas por dentro.</div></div><div class="mcard-price">12,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-croquetasmorcilla.jpg','Croquetas de Morcilla y Pistacho')">
+        <div class="mcard-img" data-cat="pistachio"><img src="assets/comp-croquetasmorcilla.jpg" alt="Croquetas Morcilla Pistacho" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Croquetas de Morcilla y Pistacho</div><div class="mcard-desc">Combinación única de morcilla de Burgos con toque de pistacho tostado. Sorprendentes.</div></div><div class="mcard-price">12,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-croquetasrabo.jpg','Croquetas de Rabo de Toro')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/comp-croquetasrabo.jpg" alt="Croquetas de Rabo de Toro" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Croquetas de Rabo de Toro</div><div class="mcard-desc">Con el sabor intenso del rabo de toro estofado a baja temperatura durante horas.</div></div><div class="mcard-price">12,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-croquetascecina.jpg','Croquetas de Cecina')">
+        <div class="mcard-img" data-cat="pork"><img src="assets/comp-croquetascecina.jpg" alt="Croquetas de Cecina" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Croquetas de Cecina</div><div class="mcard-desc">Con cecina de León curada y ahumada de primera calidad. Sabor profundo e intenso.</div></div><div class="mcard-price">12,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-croquetasquesoazul.webp','Croquetas de Queso Azul')">
+        <div class="mcard-img" data-cat="cheese"><img src="assets/comp-croquetasquesoazul.webp" alt="Croquetas de Queso Azul" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Croquetas de Queso Azul</div><div class="mcard-desc">Para los amantes del queso. Bechamel con queso azul potente y notas especiadas.</div></div><div class="mcard-price">12,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-croqueton.jpg','Croquetón de Morcilla')">
+        <div class="mcard-img" data-cat="special"><img src="assets/comp-croqueton.jpg" alt="Croquetón de Morcilla" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Croquetón de Morcilla</div><div class="mcard-desc">Nuestra croqueta grande de autor con morcilla. Una ración para compartir o disfrutar solo.</div></div><div class="mcard-price">3,50€</div></div>
+      </div>
+
+      <div class="cat-sep"><span>Patatas</span></div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-patata.jpg','Patatas Kumoa')">
+        <div class="mcard-img" data-cat="potato"><img src="assets/comp-patata.jpg" alt="Patatas Kumoa" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Patatas Kumoa</div><div class="mcard-desc">Nuestras patatas caseras fritas al momento con sal maldon y nuestra salsa secreta.</div></div><div class="mcard-price">9,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/comp-patatamixtas.jpg','Patatas Kumoa Mixtas')">
+        <div class="mcard-img" data-cat="potato"><img src="assets/comp-patatamixtas.jpg" alt="Patatas Kumoa Mixtas" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Patatas Kumoa Mixtas</div><div class="mcard-desc">Las mismas patatas Kumoa acompañadas de dos salsas de la casa a elegir.</div></div><div class="mcard-price">9,50€</div></div>
+      </div>
+    </div>
+
+    <!-- CARNE -->
+    <div class="cat" id="cat-carne">
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/car-cachopo400g.jpg','Cachopo 400g')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/car-cachopo400g.jpg" alt="Cachopo 400g" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Cachopo 400g</div><div class="mcard-desc">El cachopo asturiano de la casa. Ternera empanada rellena de jamón y queso fundido.</div></div><div class="mcard-price">19,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/car-cachopo500g.jpg','Cachopo 500g')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/car-cachopo500g.jpg" alt="Cachopo 500g" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Cachopo 500g</div><div class="mcard-desc">La versión grande del cachopo. Mismo relleno premium, más ración para los más hambrientos.</div></div><div class="mcard-price">21,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/car-cachopo600g.jpg','Cachopo 600g')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/car-cachopo600g.jpg" alt="Cachopo 600g" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Cachopo 600g</div><div class="mcard-desc">Para los valientes. Cachopo de 600g con relleno generoso y acompañamiento.</div></div><div class="mcard-price">26,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/car-cachopo1kg.jpg','Cachopo 1kg')">
+        <div class="mcard-img" data-cat="special"><img src="assets/car-cachopo1kg.jpg" alt="Cachopo 1kg" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Cachopo 1kg</div><div class="mcard-desc">El rey de la mesa. Un kilo de cachopo asturiano premium para los más atrevidos.</div></div><div class="mcard-price">29,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/car-costillar.png','Costillar')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/car-costillar.png" alt="Costillar" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Costillar</div><div class="mcard-desc">Costillar de cerdo a baja temperatura con glaseado BBQ de la casa. Se deshace solo.</div></div><div class="mcard-price">19,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/car-lomitos.jpg','Lomitos')">
+        <div class="mcard-img" data-cat="pork"><img src="assets/car-lomitos.jpg" alt="Lomitos" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Lomitos</div><div class="mcard-desc">Lomo de cerdo ibérico a la plancha con especias de la casa. Tierno y jugoso.</div></div><div class="mcard-price">15,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/car-entrecot.jpg','Entrecot')">
+        <div class="mcard-img" data-cat="special"><img src="assets/car-entrecot.jpg" alt="Entrecot" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Entrecot</div><div class="mcard-desc">Entrecot de ternera a la plancha con sal maldon y patatas o ensalada. Punto perfecto.</div></div><div class="mcard-price">18,95€</div></div>
+      </div>
+    </div>
+
+    <!-- TOSTAS & SÁNDWICH -->
+    <div class="cat" id="cat-tostas">
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/tos-salmon.jpg','Tosta de Salmón')">
+        <div class="mcard-img" data-cat="seafood"><img src="assets/tos-salmon.jpg" alt="Tosta de Salmón" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tosta de Salmón</div><div class="mcard-desc">Pan artesano tostado con salmón ahumado, crema de queso y alcaparras. Elegante y fresca.</div></div><div class="mcard-price">12,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/tos-jamon.jpg','Tosta de Jamón Ibérico')">
+        <div class="mcard-img" data-cat="pork"><img src="assets/tos-jamon.jpg" alt="Tosta de Jamón Ibérico" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tosta de Jamón Ibérico</div><div class="mcard-desc">Pan de masa madre tostado con jamón ibérico de bellota y tomate natural rallado.</div></div><div class="mcard-price">10,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/tos-sandwich.jpg','Sándwich Kumoa')">
+        <div class="mcard-img" data-cat="special"><img src="assets/tos-sandwich.jpg" alt="Sándwich Kumoa" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Sándwich Kumoa</div><div class="mcard-desc">Nuestro sándwich de autor con pollo asado, bacon, queso fundido y salsas propias.</div></div><div class="mcard-price">13,00€</div></div>
+      </div>
+    </div>
+
+    <!-- POSTRES -->
+    <div class="cat" id="cat-postres">
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/pos-lotus.jpg','Tarta de Lotus')">
+        <div class="mcard-img" data-cat="dessert"><img src="assets/pos-lotus.jpg" alt="Tarta de Lotus" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tarta de Lotus</div><div class="mcard-desc">La favorita de la casa. Base de galleta Lotus, crema de especias y cobertura crujiente.</div></div><div class="mcard-price">5,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/pos-pistacho.jpg','Postre de Pistacho')">
+        <div class="mcard-img" data-cat="pistachio"><img src="assets/pos-pistacho.jpg" alt="Postre de Pistacho" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Postre de Pistacho</div><div class="mcard-desc">La nueva joya de nuestra carta. Creación especial de la casa con pistacho artesano.</div></div><div class="mcard-price">6,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/pos-queso.jpg','Tarta de Queso')">
+        <div class="mcard-img" data-cat="cheese"><img src="assets/pos-queso.jpg" alt="Tarta de Queso" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tarta de Queso</div><div class="mcard-desc">Al horno, textura cremosa y ligeramente tostada. Acompañada de coulis de frutos rojos.</div></div><div class="mcard-price">6,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/pos-torrija.jpg','Torrija Caramelizada')">
+        <div class="mcard-img" data-cat="dessert"><img src="assets/pos-torrija.jpg" alt="Torrija Caramelizada" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Torrija Caramelizada</div><div class="mcard-desc">Torrija casera y esponjosa bañada en caramelo con helado artesano de canela.</div></div><div class="mcard-price">6,90€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/pos-coulant.jpg','Coulant de Chocolate')">
+        <div class="mcard-img" data-cat="chocolate"><img src="assets/pos-coulant.jpg" alt="Coulant de Chocolate" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Coulant de Chocolate</div><div class="mcard-desc">Bizcocho con interior fundente servido templado con helado de vainilla artesano.</div></div><div class="mcard-price">6,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/pos-tequenos.jpg','Tequeños de Chocolate')">
+        <div class="mcard-img" data-cat="cheese"><img src="assets/pos-tequenos.jpg" alt="Tequeños de Chocolate" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tequeños de Chocolate</div><div class="mcard-desc">Nuestros tequeños en versión dulce, rellenos de chocolate fundido. Adictivos.</div></div><div class="mcard-price">6,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/pos-haagendazs.jpg','Häagen-Dazs')">
+        <div class="mcard-img" data-cat="dessert"><img src="assets/pos-haagendazs.jpg" alt="Häagen-Dazs" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Häagen-Dazs</div><div class="mcard-desc">Helado premium Häagen-Dazs a elegir entre los sabores disponibles en carta.</div></div><div class="mcard-price">4,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/pos-cono.jpg','Cono Sin Gluten')">
+        <div class="mcard-img" data-cat="veggie"><img src="assets/pos-cono.jpg" alt="Cono Sin Gluten" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Cono Sin Gluten</div><div class="mcard-desc">Helado artesano en cono sin gluten. Para que nadie se quede sin postre.</div></div><div class="mcard-price">3,95€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/pos-nutella.jpg','Postre de Nutella')">
+        <div class="mcard-img" data-cat="chocolate"><img src="assets/pos-nutella.jpg" alt="Postre de Nutella" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Postre de Nutella</div><div class="mcard-desc">Creación de la casa con Nutella, base crujiente y cobertura de avellanas tostadas.</div></div><div class="mcard-price">6,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/pos-coulantsingluten.jpg','Coulant Sin Gluten')">
+        <div class="mcard-img" data-cat="chocolate"><img src="assets/pos-coulantsingluten.jpg" alt="Coulant Sin Gluten" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Coulant Sin Gluten</div><div class="mcard-desc">El mismo coulant fundente de siempre, adaptado para celíacos. Sin renunciar al placer.</div></div><div class="mcard-price">6,50€</div></div>
+      </div>
+    </div>
+
+    <!-- BEBIDAS -->
+    <div class="cat" id="cat-bebidas">
+
+      <!-- ── REFRESCOS ── -->
+      <div class="cat-sep"><span>Refrescos &amp; Sin Alcohol</span></div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-cocacola.jpeg','Coca-Cola')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-cocacola.jpeg" alt="Coca-Cola" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Coca-Cola</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-cocacola_zero.webp','Coca-Cola Zero')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-cocacola_zero.webp" alt="Coca-Cola Zero" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Coca-Cola Zero</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-fanta_naranja.jpeg','Fanta Naranja')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-fanta_naranja.jpeg" alt="Fanta Naranja" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Fanta Naranja</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-fanta_limon.jpeg','Fanta Limón')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-fanta_limon.jpeg" alt="Fanta Limón" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Fanta Limón</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-sprite.jpeg','Sprite')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-sprite.jpeg" alt="Sprite" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Sprite</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-aquarius_naranja.jpeg','Aquarius Naranja')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-aquarius_naranja.jpeg" alt="Aquarius Naranja" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Aquarius Naranja</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-aquarius_limon.jpeg','Aquarius Limón')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-aquarius_limon.jpeg" alt="Aquarius Limón" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Aquarius Limón</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-tonica.jpeg','Tónica')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-tonica.jpeg" alt="Tónica" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tónica</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-tonica_fresa.jpeg','Tónica Fresa')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-tonica_fresa.jpeg" alt="Tónica Fresa" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tónica Fresa</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-fuz_tea.jpeg','Fuz Tea')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-fuz_tea.jpeg" alt="Fuz Tea" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Fuz Tea</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-fuz_tea_maracuya.webp','Fuz Tea Maracuyá')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-ref-fuz_tea_maracuya.webp" alt="Fuz Tea Maracuyá" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Fuz Tea Maracuyá</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-red_bull.webp','Red Bull')">
+        <div class="mcard-img" data-cat="special"><img src="assets/beb-ref-red_bull.webp" alt="Red Bull" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Red Bull</div></div><div class="mcard-price">3,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-zumos.webp','Zumos')">
+        <div class="mcard-img" data-cat="veggie"><img src="assets/beb-ref-zumos.webp" alt="Zumos" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Zumos</div></div><div class="mcard-price">2,70€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-agua_50_cl.webp','Agua 50cl')">
+        <div class="mcard-img" data-cat="seafood"><img src="assets/beb-ref-agua_50_cl.webp" alt="Agua 50cl" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Agua 50cl</div></div><div class="mcard-price">1,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-agua_1_l.webp','Agua 1L')">
+        <div class="mcard-img" data-cat="seafood"><img src="assets/beb-ref-agua_1_l.webp" alt="Agua 1L" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Agua 1L</div></div><div class="mcard-price">2,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-agua_con_gas.webp','Agua con Gas')">
+        <div class="mcard-img" data-cat="seafood"><img src="assets/beb-ref-agua_con_gas.webp" alt="Agua con Gas" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Agua con Gas</div></div><div class="mcard-price">2,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-aperol.jpeg','Aperol Spritz')">
+        <div class="mcard-img" data-cat="special"><img src="assets/beb-ref-aperol.jpeg" alt="Aperol Spritz" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Aperol Spritz</div></div><div class="mcard-price">5,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-tinto_de_verano_sarango.jpeg','Tinto de Verano')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/beb-ref-tinto_de_verano_sarango.jpeg" alt="Tinto de Verano" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tinto de Verano</div></div><div class="mcard-price">2,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-vermut_izaguirre.webp','Vermut Izaguirre')">
+        <div class="mcard-img" data-cat="pork"><img src="assets/beb-ref-vermut_izaguirre.webp" alt="Vermut Izaguirre" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Vermut Izaguirre</div></div><div class="mcard-price">4,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-vermuth_martini_blanco.webp','Vermuth Martini Blanco')">
+        <div class="mcard-img" data-cat="pork"><img src="assets/beb-ref-vermuth_martini_blanco.webp" alt="Vermuth Martini Blanco" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Martini Blanco</div></div><div class="mcard-price">4,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-ref-vermuth_martini_rojo.webp','Vermuth Martini Rojo')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/beb-ref-vermuth_martini_rojo.webp" alt="Vermuth Martini Rojo" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Martini Rojo</div></div><div class="mcard-price">4,00€</div></div>
+      </div>
+
+      <!-- ── CERVEZAS ── -->
+      <div class="cat-sep"><span>Cervezas</span></div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-copa_cerveza_33_cl.webp','Copa Cerveza 33cl')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-cer-copa_cerveza_33_cl.webp" alt="Copa Cerveza 33cl" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Copa Cerveza 33cl</div></div><div class="mcard-price">2,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-copa_radler_33_cl.jpg','Copa Radler 33cl')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-cer-copa_radler_33_cl.jpg" alt="Copa Radler 33cl" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Copa Radler 33cl</div></div><div class="mcard-price">2,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-clara_con_casera.jpg','Clara con Casera')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-cer-clara_con_casera.jpg" alt="Clara con Casera" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Clara con Casera</div></div><div class="mcard-price">2,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-mahou_5.jpeg','Mahou 5 Estrellas')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-cer-mahou_5.jpeg" alt="Mahou 5★" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Mahou 5★</div></div><div class="mcard-price">3,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-mahou_tostada_0_0.webp','Mahou Tostada 0,0')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-cer-mahou_tostada_0_0.webp" alt="Mahou Tostada 0,0" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Mahou Tostada 0,0</div></div><div class="mcard-price">3,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-tostada_0_0_con_limon.webp','Tostada 0,0 con Limón')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-cer-tostada_0_0_con_limon.webp" alt="Tostada 0,0 con Limón" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Tostada 0,0 con Limón</div></div><div class="mcard-price">3,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-san_miguel_0_0.webp','San Miguel 0,0')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-cer-san_miguel_0_0.webp" alt="San Miguel 0,0" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">San Miguel 0,0</div></div><div class="mcard-price">3,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-coronita.webp','Coronita')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-cer-coronita.webp" alt="Coronita" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Coronita</div></div><div class="mcard-price">3,00€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-alhambra_reserva.webp','Alhambra Reserva')">
+        <div class="mcard-img" data-cat="special"><img src="assets/beb-cer-alhambra_reserva.webp" alt="Alhambra Reserva" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Alhambra Reserva</div></div><div class="mcard-price">3,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-budweiser.jpeg','Budweiser')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/beb-cer-budweiser.jpeg" alt="Budweiser" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Budweiser</div></div><div class="mcard-price">3,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-mahou_reserva.webp','Mahou Reserva')">
+        <div class="mcard-img" data-cat="special"><img src="assets/beb-cer-mahou_reserva.webp" alt="Mahou Reserva" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Mahou Reserva</div></div><div class="mcard-price">3,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-cer-mahou_maestra.jpeg','Mahou Maestra')">
+        <div class="mcard-img" data-cat="special"><img src="assets/beb-cer-mahou_maestra.jpeg" alt="Mahou Maestra" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Mahou Maestra</div></div><div class="mcard-price">3,50€</div></div>
+      </div>
+
+      <!-- ── VINOS COPA ── -->
+      <div class="cat-sep"><span>Vinos — Copa</span></div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-vin-vino_copa_ribera_del_duero_crianza.jpeg','Vino Copa Ribera del Duero')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/beb-vin-vino_copa_ribera_del_duero_crianza.jpeg" alt="Copa Ribera del Duero" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Ribera del Duero</div></div><div class="mcard-price">3,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-vin-vino_copa_verdejo_4_rayas.jpeg','Vino Copa Verdejo 4 Rayas')">
+        <div class="mcard-img" data-cat="veggie"><img src="assets/beb-vin-vino_copa_verdejo_4_rayas.jpeg" alt="Copa Verdejo 4 Rayas" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Verdejo 4 Rayas</div></div><div class="mcard-price">3,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-vin-vino_copa_cune.jpeg','Vino Copa Cune')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/beb-vin-vino_copa_cune.jpeg" alt="Copa Cune" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Cune</div></div><div class="mcard-price">3,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-vin-vino_copa_alma.jpeg','Vino Copa Alma')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/beb-vin-vino_copa_alma.jpeg" alt="Copa Alma" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Alma</div></div><div class="mcard-price">3,00€</div></div>
+      </div>
+
+      <!-- ── VINOS BOTELLA ── -->
+      <div class="cat-sep"><span>Vinos — Botella</span></div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-vin-botella_vino_ribera_del_duero_crianza.jpeg','Botella Ribera del Duero Crianza')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/beb-vin-botella_vino_ribera_del_duero_crianza.jpeg" alt="Botella Ribera del Duero" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Ribera del Duero Crianza</div></div><div class="mcard-price">17,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-vin-botella_vino_cune.webp','Botella Cune')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/beb-vin-botella_vino_cune.webp" alt="Botella Cune" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Cune</div></div><div class="mcard-price">17,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-vin-botella_verdejo_4_rayas.jpg','Botella Verdejo 4 Rayas')">
+        <div class="mcard-img" data-cat="veggie"><img src="assets/beb-vin-botella_verdejo_4_rayas.jpg" alt="Botella Verdejo 4 Rayas" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Verdejo 4 Rayas</div></div><div class="mcard-price">16,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-vin-botella_vino_alma.webp','Botella Alma')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/beb-vin-botella_vino_alma.webp" alt="Botella Alma" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Alma</div></div><div class="mcard-price">14,00€</div></div>
+      </div>
+
+      <!-- ── CHUPITOS ── -->
+      <div class="cat-sep"><span>Chupitos</span></div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-chu-limoncelo.jpeg','Limoncello')">
+        <div class="mcard-img" data-cat="drink"><img src="assets/beb-chu-limoncelo.jpeg" alt="Limoncello" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Limoncello</div><div class="mcard-desc">Chupito de limoncello. Frío, cítrico y refrescante.</div></div><div class="mcard-price">2,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-chu-licor.jpeg','Licor')">
+        <div class="mcard-img" data-cat="drink"><img src="assets/beb-chu-licor.jpeg" alt="Licor" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Licor</div><div class="mcard-desc">Chupito de licor a elegir entre los disponibles.</div></div><div class="mcard-price">2,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-chu-especial.jpg','Especial')">
+        <div class="mcard-img" data-cat="drink"><img src="assets/beb-chu-especial.jpg" alt="Especial" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Especial</div><div class="mcard-desc">Chupito especial de la casa. Pregunta cuál es la sorpresa de hoy.</div></div><div class="mcard-price">3,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/beb-chu-sinalcohol.jpg','Sin Alcohol')">
+        <div class="mcard-img" data-cat="drink"><img src="assets/beb-chu-sinalcohol.jpg" alt="Sin Alcohol" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Sin Alcohol</div><div class="mcard-desc">Chupito sin alcohol para disfrutar sin limitaciones.</div></div><div class="mcard-price">1,50€</div></div>
+      </div>
+
+    </div>
+
+    <!-- PROMO VIERNES -->
+    <div class="cat" id="cat-promos">
+
+      <div class="cat-sep"><span>Todos los viernes · 15,00€ el combo</span></div>
+      <p style="grid-column:1/-1;font-family:'Lato',sans-serif;font-size:14px;color:var(--muted);text-align:center;padding:4px 0 24px;line-height:1.7">
+        Elige <strong style="color:var(--text)">bebida + entrante + plato + final</strong>. Todos los combos al mismo precio.
+      </p>
+
+      <!-- PROMO 1: SMASH -->
+      <div class="promo-card stag" style="grid-column:1/-1">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <span style="font-size:3rem">🍔</span>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:.25em;text-transform:uppercase;color:var(--accent)">Promo Viernes</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--text);letter-spacing:.05em;line-height:1">Smash Burger</div>
+          </div>
+          <div class="promo-price" style="margin-left:auto">15,00€</div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:20px 0"></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">🥤 Bebida</div>
+            <div class="promo-opt">Cerveza</div>
+            <div class="promo-opt">Refresco</div>
+            <div class="promo-opt">Tinto verano</div>
+          </div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">🍽️ Entrante</div>
+            <div class="promo-opt">Tequeños</div>
+            <div class="promo-opt">Fingers de pollo</div>
+            <div class="promo-opt">Gamba Tornado</div>
+          </div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">🍔 Plato</div>
+            <div class="promo-opt promo-opt-fixed">Smash Burger</div>
+          </div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">☕ Para terminar</div>
+            <div class="promo-opt">Café</div>
+            <div class="promo-opt">Postre</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROMO 2: POLLO CRUJIENTE -->
+      <div class="promo-card stag" style="grid-column:1/-1">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <span style="font-size:3rem">🍗</span>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:.25em;text-transform:uppercase;color:var(--accent)">Promo Viernes</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--text);letter-spacing:.05em;line-height:1">Pollo Crujiente</div>
+          </div>
+          <div class="promo-price" style="margin-left:auto">15,00€</div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:20px 0"></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">🥤 Bebida</div>
+            <div class="promo-opt">Cerveza</div>
+            <div class="promo-opt">Refresco</div>
+            <div class="promo-opt">Tinto verano</div>
+          </div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">🍽️ Entrante</div>
+            <div class="promo-opt">Tequeños</div>
+            <div class="promo-opt">Fingers de pollo</div>
+            <div class="promo-opt">Gamba Tornado</div>
+          </div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">🍗 Plato</div>
+            <div class="promo-opt promo-opt-fixed">Pollo Crujiente</div>
+          </div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">☕ Para terminar</div>
+            <div class="promo-opt">Café</div>
+            <div class="promo-opt">Postre</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROMO 3: ENSALADA CÉSAR -->
+      <div class="promo-card stag" style="grid-column:1/-1">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <span style="font-size:3rem">🥗</span>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:.25em;text-transform:uppercase;color:var(--accent)">Promo Viernes</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--text);letter-spacing:.05em;line-height:1">Ensalada César</div>
+          </div>
+          <div class="promo-price" style="margin-left:auto">15,00€</div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:20px 0"></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">🥤 Bebida</div>
+            <div class="promo-opt">Cerveza</div>
+            <div class="promo-opt">Refresco</div>
+            <div class="promo-opt">Tinto verano</div>
+          </div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">🍽️ Entrante</div>
+            <div class="promo-opt">Tequeños</div>
+            <div class="promo-opt">Fingers de pollo</div>
+            <div class="promo-opt">Gamba Tornado</div>
+          </div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">🥗 Plato</div>
+            <div class="promo-opt promo-opt-fixed">Ensalada César</div>
+          </div>
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">☕ Para terminar</div>
+            <div class="promo-opt">Café</div>
+            <div class="promo-opt">Postre</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EXTRAS & SALSAS -->
+    <div class="cat" id="cat-extras">
+
+      <div class="cat-sep"><span>Ingredientes Extra</span></div>
+
+      <div class="mcard stag">
+        <div class="mcard-img" data-cat="special"><span class="mcard-img-icon">➕</span></div>
+        <div class="mcard-content">
+          <div class="mcard-body">
+            <div class="mcard-name">Extra</div>
+            <div class="mcard-desc">Añade un ingrediente extra a tu hamburguesa o plato. Pregunta disponibilidad.</div>
+          </div>
+          <div class="mcard-price">1,00€</div>
+        </div>
+      </div>
+
+      <div class="cat-sep"><span>Salsas &amp; Mermeladas</span></div>
+
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/ext-mermelada.avif','Mermelada')">
+        <div class="mcard-img" data-cat="dessert"><img src="assets/ext-mermelada.avif" alt="Mermelada" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Mermelada</div><div class="mcard-desc">Mermelada artesana de la casa. Perfecta para acompañar tostas y postres.</div></div><div class="mcard-price">0,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/ext-bigmac.avif','Salsa Big Mac')">
+        <div class="mcard-img" data-cat="burger"><img src="assets/ext-bigmac.avif" alt="Salsa Big Mac" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Salsa Big Mac</div><div class="mcard-desc">La icónica salsa estilo Big Mac. Cremosa, con mostaza y pepinillos. Muy demandada.</div></div><div class="mcard-price">0,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/ext-smokeybacon.jpg','Smokey Bacon')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/ext-smokeybacon.jpg" alt="Smokey Bacon" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Smokey Bacon</div><div class="mcard-desc">Salsa ahumada con notas de bacon crujiente. Combina perfecto con las carnes.</div></div><div class="mcard-price">0,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/ext-mostaza.jpg','Mostaza')">
+        <div class="mcard-img" data-cat="veggie"><img src="assets/ext-mostaza.jpg" alt="Mostaza" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Mostaza</div><div class="mcard-desc">Mostaza clásica de grano entero. Suave y aromática, ideal para carnes y tostas.</div></div><div class="mcard-price">0,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/ext-mayotrufada.jpg','Mayonesa Trufada')">
+        <div class="mcard-img" data-cat="special"><img src="assets/ext-mayotrufada.jpg" alt="Mayonesa Trufada" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Mayonesa Trufada</div><div class="mcard-desc">Nuestra mayo con trufa negra rallada. La favorita para potenciar cualquier hamburguesa.</div></div><div class="mcard-price">0,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/ext-mostazamiel.jpg','Mostaza Miel')">
+        <div class="mcard-img" data-cat="dessert"><img src="assets/ext-mostazamiel.jpg" alt="Mostaza Miel" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Mostaza Miel</div><div class="mcard-desc">Mezcla perfecta de mostaza con miel. Dulce, suave y con un toque picante al final.</div></div><div class="mcard-price">0,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/ext-bbq.webp','BBQ')">
+        <div class="mcard-img" data-cat="bbq"><img src="assets/ext-bbq.webp" alt="BBQ" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">BBQ</div><div class="mcard-desc">Salsa barbacoa artesana de la casa. Ahumada, dulce y ligeramente picante.</div></div><div class="mcard-price">0,50€</div></div>
+      </div>
+      <div class="mcard mcard-photo stag" onclick="abrirLightbox('assets/ext-mojopicon.jpg','Mojo Picón')">
+        <div class="mcard-img" data-cat="veggie"><img src="assets/ext-mojopicon.jpg" alt="Mojo Picón" loading="lazy" class="bimg"></div>
+        <div class="mcard-content"><div class="mcard-body"><div class="mcard-name">Mojo Picón</div><div class="mcard-desc">Mojo canario tradicional con pimientos y especias. Picante y muy aromático.</div></div><div class="mcard-price">0,50€</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     GALERÍA
+═══════════════════════════════════════════ -->
+<section id="galeria">
+  <div class="container">
+
+    <div class="sec-head reveal">
+      <span class="label">@kumoatoledo</span>
+      <h2 class="sec-title">Nuestra galería</h2>
+      <p class="sec-sub">Instantes de lo que nos hace únicos. Síguenos para ver más.</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item stag g-tall" onclick="abrirLightbox('assets/gal-IMG_2785.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2785.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag" onclick="abrirLightbox('assets/gal-IMG_2786.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2786.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag" onclick="abrirLightbox('assets/gal-IMG_2791.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2791.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag g-wide" onclick="abrirLightbox('assets/gal-IMG_2793.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2793.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag" onclick="abrirLightbox('assets/gal-IMG_2794.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2794.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag" onclick="abrirLightbox('assets/gal-IMG_2796.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2796.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag g-tall" onclick="abrirLightbox('assets/gal-IMG_2797.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2797.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag" onclick="abrirLightbox('assets/gal-IMG_2799.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2799.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag" onclick="abrirLightbox('assets/gal-IMG_2801.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2801.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag g-wide" onclick="abrirLightbox('assets/gal-IMG_2807.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2807.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag" onclick="abrirLightbox('assets/gal-IMG_2810.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2810.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag" onclick="abrirLightbox('assets/gal-IMG_2813.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2813.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+      <div class="gallery-item stag" onclick="abrirLightbox('assets/gal-IMG_2814.png','Kumoa Toledo')">
+        <img src="assets/gal-IMG_2814.png" alt="Kumoa Toledo" loading="lazy">
+      </div>
+    </div>
+
+    <div class="gallery-ig reveal">
+      <a href="https://www.instagram.com/kumoatoledo/" target="_blank" rel="noopener noreferrer">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+        @kumoatoledo en Instagram
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TESTIMONIOS
+═══════════════════════════════════════════ -->
+<section id="testimonios">
+  <div class="container">
+
+    <div class="sec-head reveal">
+      <span class="label">Lo que dicen nuestros clientes</span>
+      <h2 class="sec-title">+500 reseñas · 4.8 estrellas</h2>
+      <p class="sec-sub">La opinión de quien más importa.</p>
+    </div>
+
+    <div class="test-grid">
+      <div class="tcard stag">
+        <div class="stars">★★★★★</div>
+        <p class="ttext">Superó las más altas expectativas. Hamburguesas increíbles, patatas caseras, refrescos generosos y camareros encantadores. Un sitio que tienes que visitar.</p>
+        <div class="tauthor">
+          <div class="avatar">A</div>
+          <div class="ainfo"><strong>ADCHE</strong><span>Google · 5/5</span></div>
+        </div>
+      </div>
+      <div class="tcard stag">
+        <div class="stars">★★★★★</div>
+        <p class="ttext">¡La comida riquísima! Destacar el torrezno y la tarta de Lotus. Brillante la atención de los camareros. Volveremos sin duda.</p>
+        <div class="tauthor">
+          <div class="avatar">M</div>
+          <div class="ainfo"><strong>Miriam Alaya</strong><span>Google · 5/5</span></div>
+        </div>
+      </div>
+      <div class="tcard stag">
+        <div class="stars">★★★★★</div>
+        <p class="ttext">Ha superado nuestras expectativas. Probé la hamburguesa de la semana (la pirata) y fue absolutamente espectacular. Un restaurante de referencia en Toledo.</p>
+        <div class="tauthor">
+          <div class="avatar">J</div>
+          <div class="ainfo"><strong>JPedro</strong><span>Google · 5/5</span></div>
+        </div>
+      </div>
+      <div class="tcard stag">
+        <div class="stars">★★★★★</div>
+        <p class="ttext">Trato cercano, servicio familiar y calidad culinaria excepcional. Se nota que ponen el corazón en cada plato. Ya somos clientes fijos.</p>
+        <div class="tauthor">
+          <div class="avatar">A</div>
+          <div class="ainfo"><strong>Aroa G.</strong><span>Google · 5/5</span></div>
+        </div>
+      </div>
+      <div class="tcard stag">
+        <div class="stars">★★★★★</div>
+        <p class="ttext">Las mejores hamburguesas de la zona, y tienen una carta mucho más extensa de lo que esperas, incluso en postres. ¡Imprescindible!</p>
+        <div class="tauthor">
+          <div class="avatar">C</div>
+          <div class="ainfo"><strong>Carmina</strong><span>Google · 5/5</span></div>
+        </div>
+      </div>
+      <div class="tcard stag">
+        <div class="stars">★★★★★</div>
+        <p class="ttext">Las hamburguesas y las patatas de lo mejor que puedes probar. Los postres también. Ambiente increíble y música perfecta. 100% recomendado.</p>
+        <div class="tauthor">
+          <div class="avatar">I</div>
+          <div class="ainfo"><strong>Iván Muñoz</strong><span>Google · 5/5</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="google-rate reveal">
+      <div class="big">4.8</div>
+      <div class="details">
+        <div class="stars">★★★★★</div>
+        <p>+500 reseñas verificadas en Google</p>
+        <p style="margin-top:4px">#1 restaurante en Las Ventas de Retamosa</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CONTACTO
+═══════════════════════════════════════════ -->
+<section id="contacto">
+  <div class="container">
+
+    <div class="sec-head reveal">
+      <span class="label">Encuéntranos</span>
+      <h2 class="sec-title">Ven a visitarnos</h2>
+      <p class="sec-sub">Reserva tu mesa o llámanos directamente. Abrimos de jueves a domingo.</p>
+    </div>
+
+    <div class="contacto-grid">
+
+      <div class="r-left">
+        <div class="info-list">
+          <div class="info-row">
+            <div class="info-ico">📍</div>
+            <div class="info-body">
+              <strong>Dirección</strong>
+              <p>Calle Libertad, 32<br>45183 Las Ventas de Retamosa, Toledo</p>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-ico">📞</div>
+            <div class="info-body">
+              <strong>Teléfono</strong>
+              <a href="tel:+34608296075">+34 608 29 60 75</a>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-ico">🕐</div>
+            <div class="info-body">
+              <strong>Horario</strong>
+              <table class="h-table">
+                <tr><td>Lunes – Miércoles</td><td>Cerrado</td></tr>
+                <tr><td>Jueves</td><td>20:00 – 23:30</td></tr>
+                <tr><td>Viernes</td><td>13:00–17:00 &nbsp;·&nbsp; 19:00–01:30</td></tr>
+                <tr><td>Sábado</td><td>13:00–17:00 &nbsp;·&nbsp; 19:00–01:30</td></tr>
+                <tr><td>Domingo</td><td>13:00–17:00 &nbsp;·&nbsp; 19:00–23:30</td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-ico">🅿️</div>
+            <div class="info-body">
+              <strong>Parking</strong>
+              <p>Parking gratuito junto al restaurante</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-card r-right">
+        <div>
+          <span class="label">Reserva online</span>
+          <h3 style="font-size:1.5rem;margin-top:8px;font-family:'Montserrat',sans-serif;font-weight:900">¿Tienes una ocasión especial?</h3>
+        </div>
+        <form onsubmit="enviarReserva(event)">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="frow">
+              <div class="fgroup">
+                <label>Nombre</label>
+                <input type="text" placeholder="Tu nombre" required>
+              </div>
+              <div class="fgroup">
+                <label>Teléfono</label>
+                <input type="tel" placeholder="+34 000 000 000" required>
+              </div>
+            </div>
+            <div class="frow">
+              <div class="fgroup">
+                <label>Fecha</label>
+                <input type="date" required>
+              </div>
+              <div class="fgroup">
+                <label>Personas</label>
+                <select>
+                  <option>1 persona</option>
+                  <option>2 personas</option>
+                  <option selected>3 personas</option>
+                  <option>4 personas</option>
+                  <option>5 personas</option>
+                  <option>6 personas</option>
+                  <option value="mas">Más de 6</option>
+                </select>
+              </div>
+            </div>
+            <div class="fgroup">
+              <label>Mensaje (opcional)</label>
+              <textarea placeholder="Alergias, petición especial, motivo de la visita..."></textarea>
+            </div>
+            <button type="submit" class="btn-send" id="sendBtn">Solicitar Reserva</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="foot-in">
+        <div>
+          <a href="#" class="foot-logo">KUMOA<span>.</span></a>
+          <p class="foot-tag">Burgers de autor · Las Ventas de Retamosa, Toledo</p>
+        </div>
+        <ul class="foot-nav">
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#carta">Carta</a></li>
+          <li><a href="#galeria">Galería</a></li>
+          <li><a href="#testimonios">Reseñas</a></li>
+          <li><a href="tel:+34608296075">608 29 60 75</a></li>
+        </ul>
+      </div>
+      <div class="foot-copy">
+        © 2026 KUMOA Toledo &nbsp;·&nbsp; Calle Libertad, 32 &nbsp;·&nbsp; Las Ventas de Retamosa, Toledo
+        &nbsp;·&nbsp; +34 608 29 60 75
+      </div>
+    </div>
+  </footer>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
+<script>
+/* ── NAVBAR ─────────────────────────────── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('solid', window.scrollY > 60);
+}, { passive: true });
+
+function toggleNav() {
+  const btn  = document.getElementById('burgerBtn');
+  const menu = document.getElementById('mobileMenu');
+  btn.classList.toggle('open');
+  menu.classList.toggle('open');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+function closeNav() {
+  document.getElementById('burgerBtn').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── SCROLL VIDEO ───────────────────────── */
+(function () {
+  const video = document.getElementById('heroVideo');
+  const hero  = document.getElementById('scroll-hero');
+  const fill  = document.getElementById('progFill');
+  if (!video || !hero) return;
+
+  const mobile  = window.matchMedia('(max-width:768px)').matches;
+  const reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  if (mobile || reduced) {
+    video.autoplay = true; video.loop = true; video.muted = true;
+    video.play().catch(() => {});
+    return;
+  }
+
+  video.pause();
+  video.currentTime = 0;
+  video.preload = 'auto';
+
+  let ready   = false;
+  let rafId   = null;
+  let seeking = false;    /* is a seek currently in flight? */
+  let pending = null;     /* latest requested time, waiting for current seek to finish */
+
+  video.addEventListener('loadedmetadata', () => { ready = true; });
+  video.load();
+
+  /*
+   * One-seek-at-a-time queue.
+   * The browser does NOT cancel previous seeks — it queues them.
+   * Sending 60 seeks/sec creates a backlog that flushes all at once → "cuts".
+   * Fix: only one seek in flight; after it completes, jump to the LATEST position.
+   */
+  video.addEventListener('seeked', () => {
+    seeking = false;
+    if (pending !== null) {
+      const t = pending;
+      pending = null;
+      doSeek(t);
+    }
+  });
+
+  function doSeek(t) {
+    if (Math.abs(t - video.currentTime) < 0.016) return; /* < 1 frame — skip */
+    seeking = true;
+    video.currentTime = t; /* exact seek, never fastSeek (fastSeek jumps to keyframes → visible cuts) */
+  }
+
+  function calcP() {
+    const rect    = hero.getBoundingClientRect();
+    const scrolled = -rect.top;
+    const range   = hero.offsetHeight - window.innerHeight;
+    if (scrolled <= 0) return 0;
+    if (scrolled >= range) return 1;
+    return scrolled / range;
+  }
+
+  function syncVideo() {
+    if (!ready || !video.duration) return;
+    const p = calcP();
+    const t = p * video.duration;
+    fill.style.width = (p * 100) + '%';
+    if (seeking) { pending = t; } /* queue latest; don't pile up seeks */
+    else { doSeek(t); }
+  }
+
+  function loop() { syncVideo(); rafId = requestAnimationFrame(loop); }
+
+  const obs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) { if (!rafId) rafId = requestAnimationFrame(loop); }
+    else { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
+  }, { rootMargin: '200px 0px' });
+  obs.observe(hero);
+
+  window.addEventListener('resize', syncVideo);
+})();
+
+/* ── REVEAL (Intersection Observer) ─────── */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.14 });
+
+document.querySelectorAll('.reveal, .r-left, .r-right').forEach(el => io.observe(el));
+
+/* ── STAGGER ────────────────────────────── */
+const stagIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.querySelectorAll('.stag').forEach((el, i) => {
+      setTimeout(() => el.classList.add('in'), i * 75);
+    });
+    stagIO.unobserve(e.target);
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.stats-grid, .cat.on, .test-grid, .gallery-grid').forEach(el => stagIO.observe(el));
+
+/* ── COUNTER ────────────────────────────── */
+const countIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.querySelectorAll('[data-count]').forEach(el => {
+      const target  = parseFloat(el.dataset.count);
+      const dec     = target % 1 !== 0;
+      const dur     = 1600;
+      const t0      = performance.now();
+      function frame(now) {
+        const p = Math.min((now - t0) / dur, 1);
+        const v = (1 - Math.pow(1 - p, 3)) * target;
+        el.textContent = dec ? v.toFixed(1) : Math.floor(v);
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    });
+    countIO.unobserve(e.target);
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stats-grid').forEach(el => countIO.observe(el));
+
+/* ── PARALLAX STRIP ─────────────────────── */
+const strip  = document.getElementById('parallax-strip');
+const pxBg   = document.getElementById('pxBg');
+if (strip && pxBg) {
+  window.addEventListener('scroll', () => {
+    const r = strip.getBoundingClientRect();
+    const p = (window.innerHeight - r.top) / (window.innerHeight + r.height);
+    pxBg.style.transform = `translateY(${(p - .5) * 65}px)`;
+  }, { passive: true });
+}
+
+/* ── TABS ───────────────────────────────── */
+function abrirLightbox(src, caption) {
+  const lb  = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  const cap = document.getElementById('lightbox-caption');
+  img.src = src;
+  img.alt = caption;
+  cap.textContent = caption;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function cerrarLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarLightbox(); });
+
+function cambiarTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.cat').forEach(c => c.classList.remove('on'));
+  btn.classList.add('on');
+  const cat = document.getElementById('cat-' + id);
+  if (!cat) return;
+  cat.classList.add('on');
+  cat.querySelectorAll('.stag').forEach((el, i) => {
+    el.classList.remove('in');
+    setTimeout(() => el.classList.add('in'), Math.min(i * 60, 600));
+  });
+}
+
+/* ── FORMULARIO ─────────────────────────── */
+function enviarReserva(e) {
+  e.preventDefault();
+  const btn = document.getElementById('sendBtn');
+  btn.textContent = '✓ Solicitud enviada — te llamamos pronto';
+  btn.style.background = '#2d6e4a';
+  btn.style.color = '#fff';
+  setTimeout(() => {
+    btn.textContent = 'Solicitar Reserva';
+    btn.style.background = ''; btn.style.color = '';
+    e.target.reset();
+  }, 4000);
+}
+</script>
+
+<!-- ═══════════════════════════════════════════
+     DINÁMICA: carga la carta desde /api/menu
+     Si falla (archivo local) mantiene el HTML estático
+═══════════════════════════════════════════ -->
+<script>
+(async () => {
+  try {
+    const r = await fetch('/api/menu');
+    if (!r.ok) return;
+    const menu = await r.json();
+    renderMenu(menu);
+  } catch (_) { /* offline o file:// → se queda el HTML estático */ }
+})();
+
+const SUBCATS = {
+  compartir: ['Entrantes','Ensaladas','Croquetas','Patatas'],
+  bebidas:   ['Refrescos & Sin Alcohol','Cervezas','Vinos — Copa','Vinos — Botella','Chupitos'],
+  extras:    ['Ingredientes Extra','Salsas & Mermeladas']
+};
+
+function renderMenu(menu) {
+  ['hamburguesas','compartir','carne','tostas','postres','bebidas','extras'].forEach(cat => {
+    const el = document.getElementById('cat-' + cat);
+    if (!el) return;
+    const items = menu.filter(p => p.categoria === cat);
+    const subs  = SUBCATS[cat] || [];
+    let html = '';
+
+    if (subs.length) {
+      subs.forEach(sub => {
+        const si = items.filter(p => p.subcategoria === sub);
+        if (!si.length) return;
+        html += `<div class="cat-sep"><span>${sub}</span></div>`;
+        si.forEach(p => { html += card(p); });
+      });
+    } else {
+      items.forEach(p => { html += card(p); });
+    }
+
+    // Preserve promo section (no cat-promos in this list)
+    el.innerHTML = html;
+  });
+}
+
+function card(p) {
+  const esc    = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/'/g,'&#39;');
+  const precio = p.precio ? Number(p.precio).toFixed(2).replace('.',',') + '€' : '';
+  const off    = p.disponible ? '' : ' mcard-off';
+  const badge  = p.disponible ? '' : '<span class="mcard-nodisponible">No disponible hoy</span>';
+  const desc   = p.descripcion ? `<div class="mcard-desc">${esc(p.descripcion)}</div>` : '';
+
+  if (!p.foto) {
+    return `<div class="mcard stag in${off}">
+      <div class="mcard-img" data-cat="food"><span class="mcard-img-icon">🍽️</span></div>
+      <div class="mcard-content"><div class="mcard-body">
+        <div class="mcard-name">${esc(p.nombre)}</div>${desc}
+      </div><div class="mcard-price">${precio}</div>${badge}</div>
+    </div>`;
+  }
+
+  return `<div class="mcard mcard-photo stag in${off}" onclick="abrirLightbox('/${esc(p.foto)}','${esc(p.nombre)}')">
+    <div class="mcard-img" data-cat="food">
+      <img src="/${esc(p.foto)}" alt="${esc(p.nombre)}" loading="lazy" class="bimg">
+    </div>
+    <div class="mcard-content"><div class="mcard-body">
+      <div class="mcard-name">${esc(p.nombre)}</div>${desc}
+    </div><div class="mcard-price">${precio}</div>${badge}</div>
+  </div>`;
+}
+</script>
+
+</body>
+</html>
