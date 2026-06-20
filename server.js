@@ -19,7 +19,6 @@ const sessions = new Map(); // token -> expiry timestamp
 
 app.use(express.json());
 app.use(cookie());
-app.use(express.static(ROOT));
 
 // ── Multer (foto uploads) ──────────────────────────────
 const storage = multer.diskStorage({
@@ -101,8 +100,13 @@ app.post('/api/upload', requireAuth, upload.single('foto'), (req, res) => {
   res.json({ foto: `assets/${req.file.filename}` });
 });
 
-// ── Pages ──────────────────────────────────────────────
+// ── Pages (antes del static para que no sean interceptadas) ──
 app.get('/', (req, res) => res.sendFile(path.join(ROOT, 'web-kumoa-toledo.html')));
-app.get('/admin', (req, res) => res.sendFile(path.join(ROOT, 'admin', 'index.html')));
+app.get('/admin',  (req, res) => res.sendFile(path.join(ROOT, 'admin', 'index.html')));
+app.get('/admin/', (req, res) => res.sendFile(path.join(ROOT, 'admin', 'index.html')));
+
+// ── Static (assets, admin/sw.js, admin/manifest.json, etc.) ──
+app.use('/admin', express.static(path.join(ROOT, 'admin'), { index: false }));
+app.use(express.static(ROOT));
 
 app.listen(PORT, () => console.log(`✅  Kumoa corriendo en http://localhost:${PORT}`));
